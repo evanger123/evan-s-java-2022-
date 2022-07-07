@@ -42,17 +42,31 @@ public class hashmap<k, v>{
             table.set(hash(key), new entry<k, v>(key, value));
         }
         else{
-            entry<k,v> current = get();
-            while (entry.nextEntry!=null){
-
+            entry<k,v> current = table.get(hash(key));
+            while (current.getNextEntry()!=null){
+                current = current.getNextEntry();
             }
+            current.setNextEntry(new entry<k, v>(key, value));
         }
+    }
+    public v get(k key){
+        entry<k, v> current = table.get(hash(key));
+        while (current.getNextEntry()!=null && current.getKey()!=key){
+            current = current.getNextEntry();
+        }
+        return current.getValue();
     }
     public int hash(k key){
         return key.hashCode()%capacity;
     }
     public static void main(String[] args){
-
+        hashmap<String, Integer> map = new hashmap<String, Integer>(12);
+        map.put("a", 1);
+        map.put("b", 2);
+        map.put("c", 3);
+        map.put("d", 4);
+        map.put("e", 5);
+        System.out.println(map.get("c"));
     }
     
 }
